@@ -12,8 +12,8 @@ const NotificationsPage = lazy(() => import('@/features/notifications/Notificati
 
 function PageLoader() {
   return (
-    <div className="flex items-center justify-center h-64">
-      <span className="w-6 h-6 border-2 border-violet-500 border-t-transparent rounded-full animate-spin" />
+    <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', background: '#0b0b1a' }}>
+      <span style={{ width: 24, height: 24, border: '2px solid #7c3aed', borderTopColor: 'transparent', borderRadius: '50%', animation: 'spin 0.7s linear infinite' }} />
     </div>
   );
 }
@@ -24,6 +24,8 @@ export default function App() {
       <BrowserRouter>
         <Suspense fallback={<PageLoader />}>
           <Routes>
+            {/* Root goes straight to login — no double-redirect */}
+            <Route path="/" element={<Navigate to="/login" replace />} />
             <Route path="/login" element={<LoginPage />} />
 
             <Route element={<AppLayout />}>
@@ -33,7 +35,8 @@ export default function App() {
               <Route path="/notifications" element={<NotificationsPage />} />
             </Route>
 
-            <Route path="*" element={<Navigate to="/dashboard" replace />} />
+            {/* Any unknown path also lands on login */}
+            <Route path="*" element={<Navigate to="/login" replace />} />
           </Routes>
         </Suspense>
       </BrowserRouter>
